@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <title>KROKKA Premium | L'Indice</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' }
+          },
+          animation: {
+            'shimmer': 'shimmer 1.5s infinite linear',
+            'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          },
+          keyframes: {
+            shimmer: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(100%)' }
+            },
+            slideUp: {
+              'from': { transform: 'translateY(20px)', opacity: '0' },
+              'to': { transform: 'translateY(0)', opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* --- PREMIUM BASE STYLES --- */
+    body {
+      background-color: #F1F5F9;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden; 
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-top: 1px solid rgba(255,255,255,0.5);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.02);
+    }
+
+    .gradient-brand { background: linear-gradient(135deg, #0f172a 0%, #334155 100%); }
+    .gradient-gold { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+    .gradient-health { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+    
+    .btn-press { transition: transform 0.1s; cursor: pointer; }
+    .btn-press:active { transform: scale(0.96); }
+
+    .skeleton {
+      background: #e2e8f0;
+      position: relative;
+      overflow: hidden;
+    }
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 h-screen w-full flex items-center justify-center bg-slate-200">
+
+  <main class="w-full h-full sm:max-w-[414px] sm:h-[90vh] sm:max-h-[850px] bg-[#F8FAFC] sm:rounded-[3rem] relative overflow-hidden shadow-2xl sm:border-[8px] sm:border-white flex flex-col">
+    
+    <header class="glass-panel sticky top-0 z-30 px-6 pt-12 pb-4 flex justify-between items-center transition-all duration-300">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-slate-300">
+          <span class="font-bold text-xl tracking-tighter">K.</span>
+        </div>
+        <div class="flex flex-col">
+          <h1 class="font-extrabold text-lg tracking-tight text-slate-900 leading-none">
+            KROKKA
+          </h1>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            Maroc Edition
+          </span>
+        </div>
+      </div>
+      
+      <button onclick="findVet()" class="w-10 h-10 rounded-full bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center relative btn-press">
+        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+        <i class="fas fa-heart-pulse"></i>
+      </button>
+    </header>
+
+    <div id="main-scroll" class="flex-1 overflow-y-auto overflow-x-hidden pb-28 no-scrollbar scroll-smooth">
+      
+      <div class="px-6 pt-6 pb-2">
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="fas fa-search text-slate-400 group-focus-within:text-slate-800 transition-colors"></i>
+          </div>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Rechercher (Royal Canin, Orijen...)"
+            class="block w-full pl-11 pr-4 py-4 bg-white border-0 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] focus:ring-2 focus:ring-slate-900 transition-all"
+            onkeyup="filterBrands()"
+          />
+        </div>
+
+        <div class="flex gap-3 mt-5 overflow-x-auto no-scrollbar pb-2">
+          <button onclick="filterCategory('toutes', this)" class="filter-btn active-filter px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-xs font-bold whitespace-nowrap shadow-lg shadow-slate-300 btn-press transition-all">Tout voir</button>
+          <button onclick="filterCategory('Chien', this)" class="filter-btn px-5 py-2.5 bg-white text-slate-500 rounded-2xl text-xs font-bold whitespace-nowrap border border-slate-100 btn-press hover:bg-slate-50 transition-all">🐶 Chien</button>
+          <button onclick="filterCategory('Chat', this)" class="filter-btn px-5 py-2.5 bg-white text-slate-500 rounded-2xl text-xs font-bold whitespace-nowrap border border-slate-100 btn-press hover:bg-slate-50 transition-all">🐱 Chat</button>
+        </div>
+        
+        <div id="coach-krokka" class="mt-4 px-1 hidden animate-slide-up">
+           <div class="bg-blue-50/50 rounded-xl p-3 flex items-start gap-3 border border-blue-100">
+             <div class="bg-blue-100 p-1.5 rounded-full text-blue-600"><i class="fas fa-lightbulb text-xs"></i></div>
+             <div>
+                <div id="coach-pill" class="text-[9px] font-bold uppercase tracking-widest text-blue-400 mb-0.5"></div>
+                <p id="coach-text" class="text-[11px] text-slate-600 font-medium leading-relaxed"></p>
+             </div>
+           </div>
+        </div>
+      </div>
+
+      <div id="view-brands" class="view-section px-6 space-y-4 pt-2 min-h-[300px]">
+        <div id="brand-skeleton" class="space-y-4">
+          <div class="h-20 bg-white rounded-2xl p-4 flex items-center gap-4 skeleton shadow-sm"></div>
+          <div class="h-20 bg-white rounded-2xl p-4 flex items-center gap-4 skeleton shadow-sm"></div>
+          <div class="h-20 bg-white rounded-2xl p-4 flex items-center gap-4 skeleton shadow-sm"></div>
+        </div>
+        <div id="brand-list" class="space-y-4 pb-10 hidden"></div>
+      </div>
+      
+    </div>
+
+    <nav class="glass-nav absolute bottom-0 w-full px-8 py-4 pb-8 z-40 flex justify-between items-center">
+      <button onclick="scrollToTop()" class="nav-item active flex flex-col items-center gap-1 w-20 group">
+        <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 bg-slate-900 text-white shadow-md shadow-slate-300">
+          <i class="fas fa-paw text-sm"></i>
+        </div>
+        <span class="text-[10px] font-bold text-slate-900">Sacs</span>
+      </button>
+
+      <button onclick="showHealthDashboard()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
+        <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
+          <i class="fas fa-heartbeat text-sm"></i>
+        </div>
+        <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Santé</span>
+      </button>
+
+      <button onclick="showFoodSafety()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
+        <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
+          <i class="fas fa-utensils text-sm"></i>
+        </div>
+        <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Aliments</span>
+      </button>
+    </nav>
+
+    <div id="result-modal" class="fixed inset-0 z-50 hidden pointer-events-none">
+      <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closeModal()"></div>
+      <div id="modal-content" class="absolute bottom-0 left-0 w-full sm:w-[414px] sm:left-auto bg-white rounded-t-[2.5rem] h-[85vh] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) pointer-events-auto flex flex-col overflow-hidden">
+        <div class="w-full flex justify-center pt-4 pb-2 flex-shrink-0 cursor-grab active:cursor-grabbing" onclick="closeModal()">
+          <div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+        </div>
+        <div id="modal-body" class="flex-1 overflow-y-auto pb-10"></div>
+        <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-200 transition-colors z-20"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <div id="health-modal" class="fixed inset-0 z-[60] hidden pointer-events-none">
+        <div id="health-modal-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closeHealthModal()"></div>
+        <div id="health-modal-content" class="absolute bottom-0 left-0 w-full sm:w-[414px] sm:left-auto bg-white rounded-t-[2.5rem] h-[90vh] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) pointer-events-auto flex flex-col overflow-hidden">
+          <div class="w-full flex justify-center pt-4 pb-2 flex-shrink-0 cursor-grab active:cursor-grabbing" onclick="closeHealthModal()">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+          </div>
+          <div id="health-modal-body" class="flex-1 overflow-y-auto pb-10"></div>
+          <button onclick="closeHealthModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white/30 transition-colors z-20"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <div id="food-modal" class="fixed inset-0 z-[70] hidden pointer-events-none">
+        <div id="food-modal-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closeFoodModal()"></div>
+        <div id="food-modal-content" class="absolute bottom-0 left-0 w-full sm:w-[414px] sm:left-auto bg-white rounded-t-[2.5rem] h-[90vh] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) pointer-events-auto flex flex-col overflow-hidden">
+          <div class="w-full flex justify-center pt-4 pb-2 flex-shrink-0 cursor-grab active:cursor-grabbing" onclick="closeFoodModal()">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+          </div>
+          <div id="food-modal-body" class="flex-1 overflow-y-auto pb-10"></div>
+          <button onclick="closeFoodModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-white/30 transition-colors z-20"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+
+    <div id="toast" class="absolute top-24 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full shadow-2xl transform -translate-y-40 transition-all duration-500 z-[80] flex items-center gap-3 w-max pointer-events-none">
+       <i class="fas fa-check-circle text-green-400"></i>
+       <span id="toast-msg" class="text-xs font-bold tracking-wide">Action effectuée</span>
+    </div>
+
+  </main>
+
+  <script>
+    // --- 1. DATA (NOUVELLE STRUCTURE AVEC IMAGES) ---
+    const decryptedBags = [
+      {
+        id: 1,
+        brandName: "Orijen",
+        productName: "Original Cat",
+        species: "Chat",
+        origin: "Canada 🇨🇦",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Orijen_Logo.svg/2560px-Orijen_Logo.svg.png", 
+        image: "https://bigcats.pl/images/ori_original_cat_5_4_1200.jpg", // Image du sac
+        score: 92,
+        priceLevel: "Très élevé",
+        freshness: "Excellente",
+        shortSummary: "Probablement l'une des meilleures croquettes industrielles sur le marché mondial.",
+        composition: "Viande de poulet fraîche (20 %), viande de dinde fraîche (10 %), œufs entiers frais (6 %), hareng entier frais (6 %), foie de poulet frais (5 %), plie entière fraîche (5 %), foie de dinde frais (5 %), cœur de poulet frais (5 %), cœur de dinde frais (5 %), cou de poulet frais (5 %)...",
+        positives: ["Taux de glucides très bas", "85% d'ingrédients d'origine animale", "Pas de céréales"],
+        negatives: ["Prix très élevé", "Odeur forte"],
+        notes: "Attention à faire une transition très lente car c'est une croquette très riche."
+      },
+      {
+        id: 2,
+        brandName: "Royal Canin",
+        productName: "Sterilised 37",
+        species: "Chat",
+        origin: "France 🇫🇷",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Royal-Canin-Logo.svg/2560px-Royal-Canin-Logo.svg.png",
+        image: "https://cdn.royalcanin-weshare-online.io/_Gkua2QBG95Xk-RBk9IP/v626/16-sterilised-37-b1-ne", // Image du sac
+        score: 88,
+        priceLevel: "Élevé",
+        freshness: "Faible",
+        shortSummary: "Une référence populaire mais dont la composition repose majoritairement sur des céréales.",
+        composition: "Protéines de volaille déshydratées, maïs, isolat de protéines végétales, fibres végétales, graisses animales, hydrolysat de protéines animales, riz, blé, pulpe de betterave, gluten de maïs, levures...",
+        positives: ["Disponibilité partout", "Taux de minéraux contrôlé"],
+        negatives: ["Le maïs est omniprésent", "Peu de viande fraîche", "Rapport qualité/prix défavorable"],
+        notes: "Convient aux chats peu actifs qui ne tolèrent pas le sans-céréales."
+      },
+      {
+        id: 3,
+        brandName: "Ownat",
+        productName: "Grain Free Prime",
+        species: "Chien",
+        origin: "Espagne 🇪🇸",
+        logo: "https://getlogovector.com/wp-content/uploads/2023/03/ownat-logo-vector.png",
+        image: "https://petsplans.com/cdn/shop/products/3D_PRIMEGF_ADULT_CAT_FACE_15.01.webp?v=1665175607", // Image du sac
+        score: 78,
+        priceLevel: "Moyen",
+        freshness: "Moyenne",
+        shortSummary: "Un excellent compromis pour du sans céréales. De la viande fraîche en bonne quantité.",
+        composition: "Viande fraîche de poulet (min. 50% avant extrusion), viandes déshydratées (20%), racines de manioc, graisse de volaille, poisson déshydraté (5%), pomme de terre déshydratée...",
+        positives: ["50% de viande fraîche annoncée", "Prix accessible pour du Grain Free", "Transparence"],
+        negatives: ["Le manioc remplace les céréales (glucides)", "Selles parfois molles au début"],
+        notes: "Une marque qui monte en puissance grâce à son rapport qualité/prix."
+      }
+    ];
+
+    // --- DATA HEALTH & FOOD (INCHANGÉES) ---
+    const healthData = {
+      dogs: {
+        commonDiseases: [
+          { id: "parvovirus", name: "Parvovirus Canin", prevalence: 45, symptoms: ["Vomissements", "Diarrhée sévère", "Léthargie", "Perte d'appétit"], description: "Le parvovirus canin est une maladie virale hautement contagieuse qui affecte principalement le système gastro-intestinal des chiens.", firstAid: ["Isoler immédiatement le chien", "Maintenir l'hydratation", "Diète 12-24h", "Javel diluée sur surfaces", "Consulter un vétérinaire"], severity: "Élevée", emergency: true },
+          { id: "leishmaniose", name: "Leishmaniose", prevalence: 38, symptoms: ["Perte de poids", "Lésions cutanées", "Problèmes oculaires"], description: "Maladie parasitaire transmise par phlébotome. Très présente au Maroc.", firstAid: ["Protéger des piqûres", "Hygiène lésions", "Alimentation équilibrée", "Consulter vétérinaire"], severity: "Moyenne-Élevée", emergency: false },
+          { id: "dermatite", name: "Dermatite Allergique", prevalence: 32, symptoms: ["Démangeaisons", "Rougeurs", "Pertes de poils"], description: "Réaction inflammatoire due à allergènes ou parasites.", firstAid: ["Identifier source", "Shampooing doux", "Collerette", "Antihistaminique (avis véto)"], severity: "Moyenne", emergency: false },
+          { id: "gastro", name: "Gastro-entérite", prevalence: 28, symptoms: ["Vomissements", "Diarrhée", "Douleurs"], description: "Inflammation estomac/intestins.", firstAid: ["Diète 12-24h", "Eau fréquente", "Surveiller température", "Consulter si > 24h"], severity: "Moyenne", emergency: false },
+          { id: "ear_infection", name: "Otite", prevalence: 25, symptoms: ["Secoue tête", "Gratte oreilles", "Odeur"], description: "Infection de l'oreille.", firstAid: ["Nettoyer délicatement", "Sécher après bain", "Consulter vétérinaire"], severity: "Faible-Moyenne", emergency: false }
+        ]
+      },
+      cats: {
+        commonDiseases: [
+          { id: "coryza", name: "Coryza du Chat", prevalence: 42, symptoms: ["Éternuements", "Écoulements", "Fièvre"], description: "Infection respiratoire complexe.", firstAid: ["Isoler", "Nettoyer écoulements", "Hydratation", "Humidificateur", "Consulter"], severity: "Moyenne-Élevée", emergency: false },
+          { id: "felv", name: "Leucose Féline (FeLV)", prevalence: 35, symptoms: ["Anémie", "Perte poids", "Léthargie"], description: "Maladie virale grave immunitaire.", firstAid: ["Isoler", "Alimentation riche", "Éviter stress", "Consulter"], severity: "Élevée", emergency: false },
+          { id: "fiv", name: "Sida du Chat (FIV)", prevalence: 30, symptoms: ["Fièvre", "Infections", "Perte poids"], description: "Virus affaiblissant l'immunité.", firstAid: ["Garder intérieur", "Alimentation qualité", "Surveiller", "Consulter régulier"], severity: "Élevée", emergency: false },
+          { id: "urinary", name: "Problèmes Urinaires", prevalence: 27, symptoms: ["Difficulté uriner", "Sang", "Léchage"], description: "Cystites, calculs, obstructions.", firstAid: ["Eau fraîche", "Nourriture humide", "Surveiller litière", "URGENCE si bloqué"], severity: "Moyenne-Élevée", emergency: true },
+          { id: "parasites", name: "Parasites Internes", prevalence: 40, symptoms: ["Diarrhée", "Poil terne", "Vers"], description: "Vers intestinaux.", firstAid: ["Vermifuge adapté", "Nettoyer litière", "Traiter puces", "Consulter"], severity: "Faible-Moyenne", emergency: false }
+        ]
+      }
+    };
+
+    const foodData = [
+      { id: "bissara", name: "Bissara", category: "safe", safety: { dogs: "safe", cats: "caution", note: "Riche en protéines végétales" }, description: "Soupe de fèves séchées.", benefits: ["Fibres", "Protéines", "Faible gras"], risks: ["Gaz", "Sel/Épices"], serving: "1-2 c.à.s occasionnel", emergency: false },
+      { id: "msmen", name: "Msemen", category: "caution", safety: { dogs: "caution", cats: "unsafe", note: "Trop riche" }, description: "Crêpe feuilletée.", benefits: ["Énergie"], risks: ["Glucides", "Huile", "Pancréatite", "Obésité"], serving: "Très petite qté", emergency: false },
+      { id: "argan", name: "Huile d'Argan", category: "safe", safety: { dogs: "safe", cats: "safe", note: "Bon pour peau/pelage" }, description: "Huile végétale marocaine.", benefits: ["Peau/Pelage", "Vitamine E", "Immunité"], risks: ["Selles molles si trop"], serving: "1/2 c.à.c", emergency: false },
+      { id: "harira", name: "Harira", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Attention oignons" }, description: "Soupe traditionnelle.", benefits: ["Protéines", "Fibres"], risks: ["Oignons (toxique)", "Sel", "Épices"], serving: "Sans oignons/épices", emergency: false },
+      { id: "menthe", name: "Thé à la Menthe", category: "unsafe", safety: { dogs: "unsafe", cats: "unsafe", note: "Caféine toxique" }, description: "Thé vert sucré.", benefits: ["Aucun"], risks: ["Caféine", "Sucre", "Cœur/Nerfs"], serving: "JAMAIS", emergency: true },
+      { id: "figues", name: "Figues", category: "safe", safety: { dogs: "safe", cats: "safe", note: "Fibres" }, description: "Fruit sucré.", benefits: ["Fibres", "Potassium"], risks: ["Diarrhée", "Sucre (séchées)"], serving: "1-2 petites", emergency: false },
+      { id: "olives", name: "Olives", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Trop salé" }, description: "Fruits marinés.", benefits: ["Antioxydants"], risks: ["Sodium", "Noyaux"], serving: "1-2 max", emergency: false },
+      { id: "amlou", name: "Amlou", category: "caution", safety: { dogs: "caution", cats: "unsafe", note: "Gras et sucré" }, description: "Pâte amandes/argan/miel.", benefits: ["Vitamine E"], risks: ["Calories", "Pancréatite"], serving: "Pointe de couteau", emergency: false },
+      { id: "citron", name: "Agrumes", category: "unsafe", safety: { dogs: "unsafe", cats: "unsafe", note: "Acide/Huiles" }, description: "Fruits acides.", benefits: ["Aucun"], risks: ["Irritation", "Huiles essentiels toxiques"], serving: "Éviter", emergency: true },
+      { id: "dates", name: "Dattes", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Trop sucré" }, description: "Fruit palmier.", benefits: ["Potassium"], risks: ["Sucre", "Noyau"], serving: "1/2 occasionnel", emergency: false }
+    ];
+
+    // --- 2. LOGIQUE D'AFFICHAGE (UPDATE pour Image Sac) ---
+    let currentFilter = 'toutes';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Simulation chargement Skeleton
+      const skeleton = document.getElementById('brand-skeleton');
+      const list = document.getElementById('brand-list');
+      
+      setTimeout(() => {
+        skeleton.classList.add('hidden');
+        list.classList.remove('hidden');
+        renderList(decryptedBags);
+        loadCoachTip();
+      }, 600); // 600ms load delay
+    });
+
+    function renderList(data) {
+      const listContainer = document.getElementById('brand-list');
+      listContainer.innerHTML = "";
+
+      if (data.length === 0) {
+        listContainer.innerHTML = `<div class="flex flex-col items-center justify-center pt-10 opacity-50"><div class="text-4xl mb-2">🤔</div><p class="text-sm font-medium">Aucun résultat</p></div>`;
+        return;
+      }
+
+      const sortedData = [...data].sort((a, b) => a.brandName.localeCompare(b.brandName));
+
+      sortedData.forEach((bag, index) => {
+        const el = document.createElement('div');
+        el.style.animationDelay = `${index * 50}ms`;
+        el.className = "group relative bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer active:scale-[0.98] animate-slide-up flex items-center justify-between";
+
+        let badgeColor = bag.score >= 80 ? 'bg-green-100 text-green-700' : bag.score >= 60 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
+        let badgeLabel = bag.score >= 80 ? 'K+' : bag.score >= 60 ? 'K' : 'K-';
+
+        el.onclick = () => showDetails(bag);
+        el.innerHTML = `
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <div class="w-12 h-12 rounded-xl ${badgeColor} flex items-center justify-center font-bold text-sm shadow-inner relative flex-shrink-0">
+              ${badgeLabel}
+              ${bag.score >= 80 ? '<span class="absolute top-0 right-0 -mt-1 -mr-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white animate-pulse"></span>' : ''}
+            </div>
+            <div class="overflow-hidden flex-1">
+              <h3 class="font-bold text-slate-900 leading-tight truncate pr-1">${bag.brandName}</h3>
+              <div class="text-sm font-medium text-slate-500 leading-tight mt-0.5 truncate pr-1">${bag.productName}</div>
+              <div class="flex items-center gap-2 mt-1.5">
+                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold uppercase tracking-wide whitespace-nowrap">${bag.species}</span>
+                <span class="text-[10px] text-slate-400 font-medium whitespace-nowrap">${bag.origin}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-16 h-20 flex-shrink-0 mx-2 flex items-center justify-center">
+             <img src="${bag.image}" class="h-full w-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform" alt="Sac" onerror="this.src='https://placehold.co/60x80/f1f5f9/94a3b8?text=Sac'">
+          </div>
+          <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-brand-500 transition-colors flex-shrink-0">
+            <i class="fas fa-chevron-right text-xs"></i>
+          </div>
+        `;
+        listContainer.appendChild(el);
+      });
+    }
+
+    // --- 3. FILTRAGE ---
+    function filterBrands() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = decryptedBags.filter(b => {
+        const matchesSearch = b.brandName.toLowerCase().includes(query) || b.productName.toLowerCase().includes(query);
+        const matchesCat = currentFilter === 'toutes' || b.species === currentFilter;
+        return matchesSearch && matchesCat;
+      });
+      renderList(filtered);
+    }
+
+    function filterCategory(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = "filter-btn px-5 py-2.5 bg-white text-slate-500 rounded-2xl text-xs font-bold whitespace-nowrap border border-slate-100 btn-press hover:bg-slate-50 transition-all";
+      });
+      btn.className = "filter-btn active-filter px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-xs font-bold whitespace-nowrap shadow-lg shadow-slate-300 btn-press transition-all";
+      document.getElementById('search-input').value = '';
+      filterBrands();
+    }
+
+    // --- 4. MODAL LOGIC (DÉTAILS DU SAC) ---
+    function showDetails(bag) {
+      const body = document.getElementById('modal-body');
+      const logoHtml = bag.logo ? `<img src="${bag.logo}" class="h-12 object-contain mx-auto mb-4" />` : '';
+
+      body.innerHTML = `
+        <div class="px-8 pt-8 pb-4 text-center">
+          ${logoHtml}
+          <div class="inline-block px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">${bag.species}</div>
+          <h2 class="text-2xl font-extrabold text-slate-900 leading-none">${bag.brandName}</h2>
+          <h3 class="text-lg font-medium text-slate-500 mb-1">${bag.productName}</h3>
+          <p class="text-xs text-slate-400 font-bold uppercase tracking-wide mb-6">Analyse Complète</p>
+          
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+               <div class="text-[10px] text-slate-400 font-bold uppercase">Prix</div>
+               <div class="font-bold text-sm text-slate-800 mt-1">${bag.priceLevel}</div>
+            </div>
+             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+               <div class="text-[10px] text-slate-400 font-bold uppercase">Fraîcheur</div>
+               <div class="font-bold text-sm text-slate-800 mt-1">${bag.freshness}</div>
+            </div>
+             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+               <div class="text-[10px] text-slate-400 font-bold uppercase">Score</div>
+               <div class="font-bold text-sm text-brand-600 mt-1">${bag.score}/100</div>
+            </div>
+          </div>
+
+          <div class="bg-brand-50 p-5 rounded-2xl border border-brand-100 text-left mb-6 relative overflow-hidden">
+             <div class="absolute -right-6 -top-6 w-20 h-20 bg-brand-500/10 rounded-full"></div>
+             <h4 class="font-bold text-brand-900 text-xs uppercase mb-2">L'avis Krokka</h4>
+             <p class="text-sm text-brand-800 font-medium leading-relaxed">"${bag.shortSummary}"</p>
+          </div>
+
+          <div class="text-left mb-6">
+            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fas fa-list-ul mr-1"></i> Composition</h5>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-600 leading-relaxed font-medium text-justify">
+              ${bag.composition}
+            </div>
+          </div>
+
+          <div class="space-y-4 text-left">
+            <div>
+               <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Ce qu'on aime</h5>
+               ${bag.positives.map(p => `<div class="flex gap-3 mb-2"><i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i><span class="text-sm font-medium text-slate-600">${p}</span></div>`).join('')}
+            </div>
+            <div>
+               <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Ce qui nous dérange</h5>
+               ${bag.negatives.map(c => `<div class="flex gap-3 mb-2"><i class="fas fa-times-circle text-red-400 mt-1 text-xs"></i><span class="text-sm font-medium text-slate-600">${c}</span></div>`).join('')}
+            </div>
+            ${bag.notes ? `
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100 mt-4">
+              <h5 class="text-xs font-bold text-yellow-600 uppercase tracking-widest mb-1">À savoir</h5>
+              <p class="text-sm text-slate-600 font-medium">${bag.notes}</p>
+            </div>` : ''}
+          </div>
+        </div>
+        <div class="p-6">
+           <button onclick="closeModal()" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl shadow-slate-300 btn-press">Fermer la fiche</button>
+        </div>
+      `;
+      
+      openModal('result-modal');
+    }
+
+    // --- 5. MODAL LOGIC (HEALTH) ---
+    function showHealthDashboard() {
+      const body = document.getElementById('health-modal-body');
+      body.innerHTML = `
+        <div class="gradient-health p-8 pb-12 text-white relative overflow-hidden">
+           <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+           <div class="relative z-10 text-center">
+             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-heartbeat"></i></div>
+             <h2 class="text-2xl font-extrabold">Santé Maroc</h2>
+             <p class="text-white/80 text-sm font-medium">Données épidémiologiques</p>
+           </div>
+        </div>
+        <div class="px-6 -mt-8 relative z-20">
+           <div class="bg-white p-5 rounded-3xl shadow-lg border border-slate-100">
+              <div class="flex gap-2 mb-4">
+                 <button onclick="renderChart('dogs')" id="btn-dogs" class="flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all">Chiens</button>
+                 <button onclick="renderChart('cats')" id="btn-cats" class="flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all">Chats</button>
+              </div>
+              <div class="h-48"><canvas id="healthChart"></canvas></div>
+           </div>
+        </div>
+        <div id="disease-list" class="px-6 mt-6 space-y-3"></div>
+      `;
+      openModal('health-modal');
+      setTimeout(() => renderChart('dogs'), 100);
+    }
+
+    function renderChart(species) {
+      // Toggle buttons
+      document.getElementById('btn-dogs').className = species === 'dogs' ? "flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all" : "flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all";
+      document.getElementById('btn-cats').className = species === 'cats' ? "flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all" : "flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all";
+
+      const data = healthData[species].commonDiseases;
+      const ctx = document.getElementById('healthChart').getContext('2d');
+      
+      if(window.myChart) window.myChart.destroy();
+      
+      window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(d => d.name.split(' ')[0]),
+          datasets: [{
+            data: data.map(d => d.prevalence),
+            backgroundColor: '#10B981',
+            borderRadius: 6,
+            barThickness: 12
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 10, family: "'Plus Jakarta Sans'" } } },
+            y: { display: false, grid: { display: false } }
+          }
+        }
+      });
+
+      // Render List
+      const list = document.getElementById('disease-list');
+      list.innerHTML = '';
+      data.forEach(d => {
+        const item = document.createElement('div');
+        item.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-md transition-all";
+        item.onclick = () => showDiseaseDetail(d);
+        item.innerHTML = `
+           <div>
+             <h4 class="font-bold text-sm text-slate-800">${d.name}</h4>
+             <div class="flex items-center gap-2 mt-1"><span class="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded font-bold">${d.severity}</span><span class="text-[10px] text-slate-400">${d.prevalence}%</span></div>
+           </div>
+           <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function showDiseaseDetail(d) {
+       // Simple replacement of body content for detail view inside modal
+       const body = document.getElementById('health-modal-body');
+       const emergencyHtml = d.emergency ? `<div class="bg-red-500 text-white p-4 rounded-xl mb-4 font-bold text-sm flex items-center gap-2 shadow-lg shadow-red-200"><i class="fas fa-exclamation-triangle"></i> URGENCE VÉTÉRINAIRE</div>` : '';
+       
+       body.innerHTML = `
+         <div class="p-6">
+           <button onclick="showHealthDashboard()" class="mb-4 text-xs font-bold text-slate-400 flex items-center gap-1 hover:text-slate-800"><i class="fas fa-arrow-left"></i> Retour</button>
+           <h2 class="text-2xl font-extrabold text-slate-900 mb-2">${d.name}</h2>
+           <p class="text-sm text-slate-500 mb-6 font-medium">${d.description}</p>
+           ${emergencyHtml}
+           
+           <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
+             <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2"><i class="fas fa-briefcase-medical text-green-500"></i> Premiers Secours</h4>
+             <ul class="space-y-3">
+               ${d.firstAid.map((step, i) => `<li class="flex gap-3 text-sm text-slate-600"><span class="w-5 h-5 bg-white rounded-full flex items-center justify-center text-xs font-bold shadow-sm text-slate-400 border border-slate-100">${i+1}</span> ${step}</li>`).join('')}
+             </ul>
+           </div>
+           <button onclick="findVet()" class="w-full py-4 bg-red-500 text-white rounded-2xl font-bold shadow-xl shadow-red-200 btn-press">Trouver un Vétérinaire</button>
+         </div>
+       `;
+       document.getElementById('health-modal-content').querySelector('.overflow-y-auto').scrollTop = 0;
+    }
+
+    // --- 6. MODAL LOGIC (FOOD) ---
+    function showFoodSafety() {
+      const body = document.getElementById('food-modal-body');
+      body.innerHTML = `
+        <div class="gradient-gold p-8 pb-12 text-white relative overflow-hidden">
+           <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+           <div class="relative z-10 text-center">
+             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-utensils"></i></div>
+             <h2 class="text-2xl font-extrabold">Aliments Maroc</h2>
+             <p class="text-white/80 text-sm font-medium">Guide de toxicité</p>
+           </div>
+        </div>
+        <div class="px-6 -mt-8 relative z-20">
+           <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 mb-4">
+              <input type="text" placeholder="Rechercher (Bissara, Msemen...)" onkeyup="filterFoods()" id="food-search" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-amber-500">
+           </div>
+           <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+              <button onclick="filterFoodCat('toutes')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold whitespace-nowrap">Tous</button>
+              <button onclick="filterFoodCat('safe')" class="px-4 py-2 bg-green-100 text-green-700 rounded-xl text-xs font-bold whitespace-nowrap">✅ Sûr</button>
+              <button onclick="filterFoodCat('caution')" class="px-4 py-2 bg-amber-100 text-amber-700 rounded-xl text-xs font-bold whitespace-nowrap">⚠️ Attention</button>
+              <button onclick="filterFoodCat('unsafe')" class="px-4 py-2 bg-red-100 text-red-700 rounded-xl text-xs font-bold whitespace-nowrap">❌ Danger</button>
+           </div>
+        </div>
+        <div id="food-list" class="px-6 mt-4 space-y-3 pb-6"></div>
+      `;
+      openModal('food-modal');
+      renderFoodList(foodData);
+    }
+
+    function renderFoodList(data) {
+      const list = document.getElementById('food-list');
+      list.innerHTML = '';
+      if(data.length === 0) { list.innerHTML = '<p class="text-center text-slate-400 text-sm mt-4">Aucun aliment trouvé</p>'; return; }
+
+      data.forEach(f => {
+        const icon = f.category === 'safe' ? 'check-circle text-green-500' : f.category === 'caution' ? 'exclamation-circle text-amber-500' : 'times-circle text-red-500';
+        const item = document.createElement('div');
+        item.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-md transition-all";
+        item.onclick = () => showFoodDetail(f);
+        item.innerHTML = `
+           <div class="flex items-center gap-3">
+             <div class="text-xl"><i class="fas fa-${icon}"></i></div>
+             <div>
+               <h4 class="font-bold text-sm text-slate-800">${f.name}</h4>
+               <p class="text-[10px] text-slate-400">${f.category === 'safe' ? 'Autorisé' : f.category === 'caution' ? 'Modération' : 'Interdit'}</p>
+             </div>
+           </div>
+           <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function filterFoods() {
+      const q = document.getElementById('food-search').value.toLowerCase();
+      const filtered = foodData.filter(f => f.name.toLowerCase().includes(q));
+      renderFoodList(filtered);
+    }
+
+    function filterFoodCat(cat) {
+      const filtered = cat === 'toutes' ? foodData : foodData.filter(f => f.category === cat);
+      renderFoodList(filtered);
+    }
+
+    function showFoodDetail(f) {
+      const body = document.getElementById('food-modal-body');
+      const colorClass = f.category === 'safe' ? 'text-green-500' : f.category === 'caution' ? 'text-amber-500' : 'text-red-500';
+      const bgClass = f.category === 'safe' ? 'bg-green-50' : f.category === 'caution' ? 'bg-amber-50' : 'bg-red-50';
+
+      body.innerHTML = `
+         <div class="p-6">
+           <button onclick="showFoodSafety()" class="mb-4 text-xs font-bold text-slate-400 flex items-center gap-1 hover:text-slate-800"><i class="fas fa-arrow-left"></i> Retour</button>
+           
+           <div class="text-center mb-6">
+              <div class="w-20 h-20 ${bgClass} rounded-full flex items-center justify-center mx-auto mb-3 text-3xl ${colorClass}"><i class="fas fa-${f.category === 'safe' ? 'check' : f.category === 'caution' ? 'exclamation' : 'times'}"></i></div>
+              <h2 class="text-2xl font-extrabold text-slate-900">${f.name}</h2>
+              <p class="text-sm text-slate-500 mt-1">${f.description}</p>
+           </div>
+
+           <div class="grid grid-cols-2 gap-3 mb-6">
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                 <div class="text-[10px] uppercase font-bold text-slate-400"><i class="fas fa-dog"></i> Chiens</div>
+                 <div class="font-bold text-sm ${f.safety.dogs === 'safe' ? 'text-green-600' : f.safety.dogs === 'caution' ? 'text-amber-600' : 'text-red-600'}">${f.safety.dogs.toUpperCase()}</div>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                 <div class="text-[10px] uppercase font-bold text-slate-400"><i class="fas fa-cat"></i> Chats</div>
+                 <div class="font-bold text-sm ${f.safety.cats === 'safe' ? 'text-green-600' : f.safety.cats === 'caution' ? 'text-amber-600' : 'text-red-600'}">${f.safety.cats.toUpperCase()}</div>
+              </div>
+           </div>
+
+           ${f.emergency ? `<div class="bg-red-500 text-white p-4 rounded-xl mb-6 font-bold text-sm text-center shadow-lg shadow-red-200">⚠️ TOXIQUE - URGENCE VÉTÉRINAIRE</div>` : ''}
+
+           <div class="space-y-4">
+             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Risques</h4>
+                <div class="flex flex-wrap gap-2">${f.risks.map(r => `<span class="text-xs bg-white px-2 py-1 rounded border border-slate-200 text-slate-600">${r}</span>`).join('')}</div>
+             </div>
+             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Service</h4>
+                <p class="text-sm font-medium text-slate-800">${f.serving}</p>
+             </div>
+           </div>
+         </div>
+      `;
+      document.getElementById('food-modal-content').querySelector('.overflow-y-auto').scrollTop = 0;
+    }
+
+    // --- 7. UTILS & MODAL CONTROLLERS ---
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      const backdrop = modal.querySelector('div[id*="backdrop"]');
+      const content = modal.querySelector('div[id*="content"]');
+      
+      modal.classList.remove('hidden');
+      // Trigger Reflow
+      void modal.offsetWidth;
+      backdrop.classList.remove('opacity-0');
+      content.classList.remove('translate-y-full');
+    }
+
+    function closeModal() { closeGeneric('result-modal'); }
+    function closeHealthModal() { closeGeneric('health-modal'); }
+    function closeFoodModal() { closeGeneric('food-modal'); }
+
+    function closeGeneric(id) {
+      const modal = document.getElementById(id);
+      const backdrop = modal.querySelector('div[id*="backdrop"]');
+      const content = modal.querySelector('div[id*="content"]');
+      
+      backdrop.classList.add('opacity-0');
+      content.classList.add('translate-y-full');
+      setTimeout(() => modal.classList.add('hidden'), 350);
+    }
+
+    function loadCoachTip() {
+      const box = document.getElementById('coach-krokka');
+      const pill = document.getElementById('coach-pill');
+      const text = document.getElementById('coach-text');
+      pill.textContent = "CONSEIL KROKKA";
+      text.textContent = "Astuce : l'eau fraîche et propre est le premier complément santé de votre chien ou chat.";
+      box.classList.remove('hidden');
+    }
+
+    function findVet() { showToast("Recherche GPS Vétérinaire..."); setTimeout(() => window.open('https://www.google.com/maps/search/vétérinaire+urgence+24h/', '_blank'), 1000); }
+    
+    function showToast(msg) {
+       const t = document.getElementById('toast');
+       document.getElementById('toast-msg').innerText = msg;
+       t.classList.remove('-translate-y-40');
+       setTimeout(() => t.classList.add('-translate-y-40'), 3000);
+    }
+    
+    function scrollToTop() {
+      document.getElementById('main-scroll').scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+  </script>
+</body>
+</html>
