@@ -225,6 +225,7 @@
   <script>
     // --- 1. DATA (NOUVELLE STRUCTURE AVEC IMAGES) ---
     const decryptedBags = [
+     /* 
       {
         id: 1,
         brandName: "Orijen",
@@ -242,6 +243,9 @@
         negatives: ["Prix très élevé", "Odeur forte"],
         notes: "Attention à faire une transition très lente car c'est une croquette très riche."
       },
+      */
+      
+      /*
       {
         id: 2,
         brandName: "Royal Canin",
@@ -259,6 +263,9 @@
         negatives: ["Le maïs est omniprésent", "Peu de viande fraîche", "Rapport qualité/prix défavorable"],
         notes: "Convient aux chats peu actifs qui ne tolèrent pas le sans-céréales."
       },
+      */
+      
+      /*
       {
         id: 3,
         brandName: "Ownat",
@@ -276,6 +283,9 @@
         negatives: ["Le manioc remplace les céréales (glucides)", "Selles parfois molles au début"],
         notes: "Une marque qui monte en puissance grâce à son rapport qualité/prix."
             },
+            */
+      
+      /*
       {
         id: 4,
         brandName: "MSM Podium",
@@ -299,6 +309,7 @@
         ],
         notes: "Idéale pour les chats adultes actifs avec un bon appétit. Toujours faire une transition progressive."
       },
+      */
     {
       id: 5,
       brandName: "Reflex Plus",
@@ -444,7 +455,7 @@
 
 },
 {
-  id: 8,
+  id: 9,
   brandName: "Supreme",
   productName: "Cat Adult Porc",
   species: "Chat",
@@ -479,6 +490,47 @@
 
   notes:
     "Supreme Cat Adult Ciccioli est une croquette qui, lorsqu’on lit réellement entre les lignes, ressemble davantage à une façon de valoriser des sous-produits porcins et du maïs qu’à une alimentation pensée pour le chat. Le cœur de la recette repose sur les ciccioli (résidus de porc fondus, riches en graisses et tissus peu nobles) et la farine de viande suine, puis sur plusieurs formes de maïs (maïs extrudé, gluten de maïs, farine glutineuse de maïs). Cela signifie qu’une partie non négligeable des protéines provient de végétaux, tandis que la fraction animale est majoritairement constituée de sous-produits gras de porc, ce qui est très éloigné de la viande musculaire de proie.\n\nLes composants analytiques montrent 30% de protéines brutes, 23% de matières grasses, 1,7% de fibres, 9% de cendres et 7% d’humidité. Pour un chat adulte, surtout stérilisé ou vivant en intérieur, ce profil est franchement inquiétant : beaucoup de graisses, très peu de fibres et une densité énergétique extrêmement élevée favorisent la prise de poids si les rations ne sont pas strictement pesées. Les cendres à 9% et un rapport calcium/phosphore inversé (plus de phosphore que de calcium) sont loin d’être rassurants pour la santé urinaire et rénale d’une espèce déjà fragile à ce niveau.\n\nL’ajout explicite de sucres dans la composition est un signal d’alerte supplémentaire : le sucre n’a aucune justification nutritionnelle chez le chat et sert surtout à jouer sur l’appétence et le comportement alimentaire. L’étiquetage de la taurine, annoncé à seulement 2,20 mg/kg, est particulièrement problématique : si la valeur est exacte, on est très en dessous des niveaux habituellement recherchés pour sécuriser les besoins d’un chat ; si c’est une erreur de virgule (par exemple 2 200 mg/kg), cela jette un sérieux doute sur la rigueur de l’étiquetage.\n\nLa présence de vitamines et d’oligo-éléments est complète sur le papier, et les conservateurs utilisés (acide citrique E330 et acide ascorbique E300) sont des antioxydants classiques en nutrition humaine et animale, mais ces éléments ne compensent pas la faiblesse structurelle de la recette : sous-produits porcins dominants, maïs en masse, sucres ajoutés, charge minérale élevée et profil gras/fibres défavorable. Dans le système Krokka, Supreme Cat Adult Ciccioli obtient logiquement une note K- : croquette à considérer comme un produit à bas intérêt nutritionnel pour le chat à long terme, surtout pour les chats stérilisés, peu actifs ou présentant déjà des fragilités urinaires ou métaboliques."
+},
+{
+  id: 10,
+  brandName: "Ownat",
+  productName: "Classic Daily Care (Cat)",
+  species: "Chat",
+  origin: "Espagne 🇪🇸",
+  logo: "https://www.ownat.com/cdnassets/main-logo-es.svg", // à compléter si tu as un logo officiel
+  image: "https://www.ownat.com/cdnassets/ow-classic-daily-care-saco-front_l.jpg", // URL du sac si tu l'as
+  score: 78, // K+ bas : correcte mais très céréalière
+  priceLevel: "Moyen",
+  freshness: "Bonne",
+
+  shortSummary:
+    "Croquette complète correcte pour chats adultes, avec une base de viandes, mais très riche en céréales et à utiliser avec prudence chez les chats stérilisés ou fragiles au niveau urinaire.",
+
+  composition:
+    "Viandes 36% (viandes déshydratées 26%, poulet frais 10% avant extrusion), maïs entier 20%, graisse de poulet, blé entier 9%, orge entière 7%, pois entiers 5%, riz complet 5%, protéines de maïs, levure de bière 1,5%, protéines de poulet hydrolysées, poisson déshydraté, pomme 1%, huile de saumon, pulpe de betterave, fructo- et mannan-oligosaccharides, herbes aromatiques (fenouil, fleur de camomille, anis vert), yucca schidigera. Ingrédients naturels.",
+
+  positives: [
+    "36% de viandes au total, dont 26% de viandes déshydratées et 10% de poulet frais avant extrusion",
+    "Taux de protéines (30%) et de matières grasses (14%) cohérents pour un chat adulte en bonne santé",
+    "Présence de poisson déshydraté et d’huile de saumon, apportant des oméga-3 pour la peau et le poil",
+    "Taurine correctement dosée à 1 000 mg/kg pour un chat adulte",
+    "Ajout de FOS/MOS, levure de bière, pulpe de betterave, pomme et plantes aromatiques pour soutenir la digestion et le microbiote",
+    "Antioxydants dits naturels, pas de mention de BHA/BHT sur cette fiche"
+  ],
+
+  negatives: [
+    "Recette très céréalière : maïs 20% + blé, orge et riz complets prennent une grande place dans la formule",
+    "Utilisation de protéines de maïs pour compléter le taux de protéines, ce qui augmente la part de protéines végétales",
+    "Glucides estimés autour de 38% sur produit tel que (~42% sur matière sèche), élevés pour un carnivore strict",
+    "Risque accru de prise de poids si les rations ne sont pas pesées, surtout chez les chats stérilisés et d’intérieur",
+    "URINAIRE : croquette 100% sèche, glucides élevés et cendres à 7,5% → profil à utiliser avec prudence chez les chats ayant des antécédents de cristaux, bouchons ou cystites",
+    "Rapport calcium/phosphore à 1,4% / 1,4% (1:1), correct mais sans marge de sécurité en faveur du calcium",
+    "Fibres à 2,2% seulement, parfois un peu juste pour la satiété des chats stérilisés ou gourmands",
+    "Mention générique 'viandes' sans préciser toujours les espèces ni la part exacte de chaque source"
+  ],
+
+  notes:
+    "Ownat Classic Daily Care (Cat) est une croquette pour chats adultes avec une base annoncée de 36% de viandes, dont 26% de viandes déshydratées et 10% de poulet frais avant extrusion. Cela apporte une fraction animale correcte, même si le terme 'viandes' reste générique et ne donne pas le détail exact des espèces et des proportions. Autour de ce noyau carné, la recette repose fortement sur les céréales : maïs entier à 20%, blé entier, orge entière et riz complet, plus 5% de pois entiers. Les protéines de maïs contribuent aussi au taux de protéines, ce qui signifie qu’une partie de ces 30% de protéines est d’origine végétale.\n\nLes constituants analytiques indiquent 30% de protéines, 14% de matières grasses, 7,5% de cendres, 2,2% de fibres et 8% d’humidité. En estimant les glucides, on obtient environ 38% sur produit tel que (~42% sur matière sèche). Pour un chat, cela représente une charge importante en amidon : ce n’est pas toxique, mais cela impose de contrôler les quantités, surtout pour les chats stérilisés ou sédentaires, sous peine de favoriser le surpoids. Les fibres restent modestes (2,2%), ce qui ne contribue pas énormément à la satiété.\n\nSur le plan URINAIRE, cette croquette n’est pas formulée comme un aliment 'urinary' : les cendres à 7,5% sont acceptables pour un aliment sec, mais combinées à une alimentation 100% croquettes, un chat qui boit peu et un niveau de glucides important, cela peut contribuer à une urine plus concentrée et à un risque accru de cristaux chez les chats fragiles. Dans un contexte comme le Maroc, où beaucoup de chats ne mangent que du sec, il est important de préciser que cette recette doit être utilisée avec prudence chez les chats stérilisés, ceux qui ont déjà eu des problèmes urinaires, et qu’il est préférable de compléter avec de l’alimentation humide et d’encourager la prise d’eau.\n\nEn lecture 'Krokka', Ownat Classic Daily Care (Cat) n’est pas une croquette dangereuse : c’est un aliment complet correct avec une base de viandes et quelques atouts digestifs. Mais elle reste très céréalière et assez riche en glucides, ce qui la place en K+ de bas de fourchette : acceptable pour un chat adulte en bonne santé avec ration pesée et bonne hydratation, à manier avec prudence pour les chats stérilisés, en surpoids ou avec un historique de problèmes urinaires."
 }
 
 
