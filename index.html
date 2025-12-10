@@ -421,10 +421,22 @@
     }
 
     // --- 4. MODAL LOGIC (DÉTAILS DU SAC) ---
+    function getScoreLabel(score) {
+      if (score >= 80) return 'K+';
+      if (score >= 60) return 'K';
+      return 'K-';
+    }
+
     function showDetails(bag) {
       const body = document.getElementById('modal-body');
       const logoHtml = bag.logo ? `<img src="${bag.logo}" class="h-12 object-contain mx-auto mb-4" />` : '';
-
+      const scoreLabel = getScoreLabel(bag.score);
+      const scoreColorClass = scoreLabel === 'K+'
+        ? 'text-green-600'
+        : scoreLabel === 'K'
+          ? 'text-amber-600'
+          : 'text-red-600';
+      
       body.innerHTML = `
         <div class="px-8 pt-8 pb-4 text-center">
           ${logoHtml}
@@ -433,18 +445,18 @@
           <h3 class="text-lg font-medium text-slate-500 mb-1">${bag.productName}</h3>
           <p class="text-xs text-slate-400 font-bold uppercase tracking-wide mb-6">Analyse Complète</p>
           
-          <div class="grid grid-cols-3 gap-3 mb-6">
-            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-               <div class="text-[10px] text-slate-400 font-bold uppercase">Prix</div>
-               <div class="font-bold text-sm text-slate-800 mt-1">${bag.priceLevel}</div>
+         <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center text-center min-h-[68px]">
+               <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Prix</div>
+               <div class="font-bold text-xs sm:text-sm text-slate-800 mt-1 leading-snug">${bag.priceLevel}</div>
             </div>
-             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-               <div class="text-[10px] text-slate-400 font-bold uppercase">Fraîcheur</div>
-               <div class="font-bold text-sm text-slate-800 mt-1">${bag.freshness}</div>
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center text-center min-h-[68px]">
+               <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Fraîcheur</div>
+               <div class="font-bold text-xs sm:text-sm text-slate-800 mt-1 leading-snug">${bag.freshness}</div>
             </div>
-             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-               <div class="text-[10px] text-slate-400 font-bold uppercase">Score</div>
-               <div class="font-bold text-sm text-brand-600 mt-1">${bag.score}/100</div>
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex flex-col items-center justify-center text-center min-h-[68px]">
+               <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Indice Krokka</div>
+               <div class="font-bold text-sm mt-1 ${scoreColorClass}">${scoreLabel}</div>
             </div>
           </div>
 
