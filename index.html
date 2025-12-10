@@ -173,12 +173,13 @@
         <span class="text-[10px] font-bold text-slate-900">Sacs</span>
       </button>
 
-      <button onclick="showHealthDashboard()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
-        <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
-          <i class="fas fa-heartbeat text-sm"></i>
-        </div>
-        <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Santé</span>
-      </button>
+      <button onclick="showRationCalculator()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
+  <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
+    <i class="fas fa-bowl-food text-sm"></i>
+  </div>
+  <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Ration</span>
+</button>
+
 
       <button onclick="showFoodSafety()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
         <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
@@ -873,106 +874,154 @@
       openModal('result-modal');
     }
 
-    // --- 5. MODAL LOGIC (HEALTH) ---
-    function showHealthDashboard() {
+        // --- 5. MODAL LOGIC (RATION CALCULATOR) ---
+    function showRationCalculator() {
       const body = document.getElementById('health-modal-body');
       body.innerHTML = `
         <div class="gradient-health p-8 pb-12 text-white relative overflow-hidden">
            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
            <div class="relative z-10 text-center">
-             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-heartbeat"></i></div>
-             <h2 class="text-2xl font-extrabold">Santé Maroc</h2>
-             <p class="text-white/80 text-sm font-medium">Données épidémiologiques</p>
+             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+               <i class="fas fa-bowl-food"></i>
+             </div>
+             <h2 class="text-2xl font-extrabold">Calculateur de ration</h2>
+             <p class="text-white/80 text-sm font-medium">Combien doit manger votre chien ou votre chat par jour ?</p>
            </div>
         </div>
-        <div class="px-6 -mt-8 relative z-20">
-           <div class="bg-white p-5 rounded-3xl shadow-lg border border-slate-100">
-              <div class="flex gap-2 mb-4">
-                 <button onclick="renderChart('dogs')" id="btn-dogs" class="flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all">Chiens</button>
-                 <button onclick="renderChart('cats')" id="btn-cats" class="flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all">Chats</button>
-              </div>
-              <div class="h-48"><canvas id="healthChart"></canvas></div>
+
+        <div class="px-6 -mt-8 relative z-20 pb-8">
+           <div class="bg-white p-5 rounded-3xl shadow-lg border border-slate-100 space-y-4">
+             
+             <div class="grid grid-cols-2 gap-3">
+               <div>
+                 <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                   Espèce
+                 </label>
+                 <select id="rc-species" class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-brand-500">
+                   <option value="chat">Chat</option>
+                   <option value="chien">Chien</option>
+                 </select>
+               </div>
+               <div>
+                 <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                   Poids (kg)
+                 </label>
+                 <input id="rc-weight" type="number" min="0.5" step="0.1"
+                   class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-brand-500"
+                   placeholder="ex: 4.5">
+               </div>
+             </div>
+
+             <div class="grid grid-cols-2 gap-3">
+               <div>
+                 <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                   Âge
+                 </label>
+                 <select id="rc-age" class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-brand-500">
+                   <option value="adulte">Adulte</option>
+                   <option value="jeune">Bébé / Junior</option>
+                   <option value="senior">Senior</option>
+                 </select>
+               </div>
+               <div>
+                 <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                   Activité
+                 </label>
+                 <select id="rc-activity" class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-brand-500">
+                   <option value="normal">Normal</option>
+                   <option value="calme">Calme / Intérieur</option>
+                   <option value="actif">Très actif</option>
+                 </select>
+               </div>
+             </div>
+
+             <div>
+               <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                 Énergie de la croquette (kcal / kg)
+               </label>
+               <input id="rc-kcal" type="number" min="2500" max="5000" step="10"
+                 class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-brand-500"
+                 placeholder="ex: 3800 (laisser vide si inconnu)">
+             </div>
+
+             <button onclick="calculateRation()" class="w-full mt-2 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-md shadow-slate-300 btn-press">
+               Calculer la ration journalière
+             </button>
+
+             <div id="rc-result" class="mt-3 text-sm text-slate-600"></div>
            </div>
+
+           <p class="mt-4 text-[11px] text-slate-400 text-center leading-relaxed">
+             ⚠️ Ce calcul donne une estimation générale pour un animal en bonne santé.
+             Pour un chat ou un chien malade, obèse, très maigre ou avec une maladie rénale/urinaire,
+             demandez toujours l'avis de votre vétérinaire.
+           </p>
         </div>
-        <div id="disease-list" class="px-6 mt-6 space-y-3"></div>
       `;
       openModal('health-modal');
-      setTimeout(() => renderChart('dogs'), 100);
+      // on s'assure que le scroll du modal est en haut
+      document.getElementById('health-modal-content').querySelector('.overflow-y-auto').scrollTop = 0;
     }
 
-    function renderChart(species) {
-      // Toggle buttons
-      document.getElementById('btn-dogs').className = species === 'dogs' ? "flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all" : "flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all";
-      document.getElementById('btn-cats').className = species === 'cats' ? "flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all" : "flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-bold transition-all";
+    function calculateRation() {
+      const species = document.getElementById('rc-species').value;    // "chat" ou "chien"
+      const weight = parseFloat(document.getElementById('rc-weight').value);
+      const age = document.getElementById('rc-age').value;            // "jeune" / "adulte" / "senior"
+      const activity = document.getElementById('rc-activity').value;  // "calme" / "normal" / "actif"
+      const kcalInput = document.getElementById('rc-kcal').value;
+      const resultEl = document.getElementById('rc-result');
 
-      const data = healthData[species].commonDiseases;
-      const ctx = document.getElementById('healthChart').getContext('2d');
-      
-      if(window.myChart) window.myChart.destroy();
-      
-      window.myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: data.map(d => d.name.split(' ')[0]),
-          datasets: [{
-            data: data.map(d => d.prevalence),
-            backgroundColor: '#10B981',
-            borderRadius: 6,
-            barThickness: 12
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { display: false }, ticks: { font: { size: 10, family: "'Plus Jakarta Sans'" } } },
-            y: { display: false, grid: { display: false } }
-          }
-        }
-      });
-
-      // Render List
-      const list = document.getElementById('disease-list');
-      list.innerHTML = '';
-      data.forEach(d => {
-        const item = document.createElement('div');
-        item.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-md transition-all";
-        item.onclick = () => showDiseaseDetail(d);
-        item.innerHTML = `
-           <div>
-             <h4 class="font-bold text-sm text-slate-800">${d.name}</h4>
-             <div class="flex items-center gap-2 mt-1"><span class="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded font-bold">${d.severity}</span><span class="text-[10px] text-slate-400">${d.prevalence}%</span></div>
-           </div>
-           <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+      if (!weight || weight <= 0 || !species) {
+        resultEl.innerHTML = `
+          <p class="text-sm text-red-500 font-medium">
+            Merci d'indiquer au minimum l'espèce et le poids en kg.
+          </p>
         `;
-        list.appendChild(item);
-      });
+        return;
+      }
+
+      // 1) Besoin énergétique de base (RER)
+      const rer = 70 * Math.pow(weight, 0.75);
+
+      // 2) Facteur selon espèce + âge
+      let factor;
+      if (species === 'chat') {
+        if (age === 'jeune') factor = 2.5;
+        else if (age === 'senior') factor = 1.1;
+        else factor = 1.2; // adulte
+      } else { // chien
+        if (age === 'jeune') factor = 2.5;
+        else if (age === 'senior') factor = 1.2;
+        else factor = 1.6; // adulte
+      }
+
+      // 3) Ajustement activité
+      if (activity === 'calme') factor *= 0.9;
+      if (activity === 'actif') factor *= 1.1;
+
+      const mer = rer * factor; // besoins journaliers en kcal
+
+      // 4) Énergie croquette
+      const kcalPerKg = kcalInput && parseFloat(kcalInput) > 0 ? parseFloat(kcalInput) : 3800; // valeur par défaut
+      const gramsPerDay = mer / (kcalPerKg / 1000); // mer / (kcal/kg) => kg, ×1000 => g
+      const gramsRounded = Math.round(gramsPerDay / 5) * 5; // arrondi aux 5 g près
+
+      const speciesLabel = species === 'chat' ? 'votre chat' : 'votre chien';
+
+      resultEl.innerHTML = `
+        <p class="text-sm text-slate-700 font-medium leading-relaxed">
+          D'après les informations fournies, ${speciesLabel} devrait manger environ
+          <span class="font-bold text-slate-900">${gramsRounded} g</span> de croquettes par jour
+          (≈ ${Math.round(mer)} kcal / jour).
+        </p>
+        <p class="mt-2 text-[11px] text-slate-400 leading-relaxed">
+          C'est une estimation basée sur le poids, l'âge et le niveau d'activité. 
+          Adaptez toujours en fonction de la silhouette réelle (trop maigre / trop rond) 
+          et demandez conseil à votre vétérinaire si vous avez un doute.
+        </p>
+      `;
     }
 
-    function showDiseaseDetail(d) {
-       // Simple replacement of body content for detail view inside modal
-       const body = document.getElementById('health-modal-body');
-       const emergencyHtml = d.emergency ? `<div class="bg-red-500 text-white p-4 rounded-xl mb-4 font-bold text-sm flex items-center gap-2 shadow-lg shadow-red-200"><i class="fas fa-exclamation-triangle"></i> URGENCE VÉTÉRINAIRE</div>` : '';
-       
-       body.innerHTML = `
-         <div class="p-6">
-           <button onclick="showHealthDashboard()" class="mb-4 text-xs font-bold text-slate-400 flex items-center gap-1 hover:text-slate-800"><i class="fas fa-arrow-left"></i> Retour</button>
-           <h2 class="text-2xl font-extrabold text-slate-900 mb-2">${d.name}</h2>
-           <p class="text-sm text-slate-500 mb-6 font-medium">${d.description}</p>
-           ${emergencyHtml}
-           
-           <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
-             <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2"><i class="fas fa-briefcase-medical text-green-500"></i> Premiers Secours</h4>
-             <ul class="space-y-3">
-               ${d.firstAid.map((step, i) => `<li class="flex gap-3 text-sm text-slate-600"><span class="w-5 h-5 bg-white rounded-full flex items-center justify-center text-xs font-bold shadow-sm text-slate-400 border border-slate-100">${i+1}</span> ${step}</li>`).join('')}
-             </ul>
-           </div>
-           <button onclick="findVet()" class="w-full py-4 bg-red-500 text-white rounded-2xl font-bold shadow-xl shadow-red-200 btn-press">Trouver un Vétérinaire</button>
-         </div>
-       `;
-       document.getElementById('health-modal-content').querySelector('.overflow-y-auto').scrollTop = 0;
-    }
 
     // --- 6. MODAL LOGIC (FOOD) ---
     function showFoodSafety() {
