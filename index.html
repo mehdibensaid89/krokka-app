@@ -234,12 +234,13 @@
 </button>
 
 
-      <button onclick="showFoodSafety()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
-        <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
-          <i class="fas fa-utensils text-sm"></i>
-        </div>
-        <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Aliments</span>
-      </button>
+      <button onclick="showBudgetCalculator()" class="nav-item flex flex-col items-center gap-1 w-20 group btn-press">
+  <div class="w-10 h-8 rounded-xl flex items-center justify-center transition-all duration-300 text-slate-400 group-hover:bg-slate-50">
+    <i class="fas fa-coins text-sm"></i>
+  </div>
+  <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">Budget</span>
+</button>
+
     </nav>
 
     <div id="result-modal" class="fixed inset-0 z-50 hidden pointer-events-none">
@@ -940,40 +941,7 @@
 
     ];
 
-    // --- DATA HEALTH & FOOD (INCHANGÉES) ---
-    const healthData = {
-      dogs: {
-        commonDiseases: [
-          { id: "parvovirus", name: "Parvovirus Canin", prevalence: 45, symptoms: ["Vomissements", "Diarrhée sévère", "Léthargie", "Perte d'appétit"], description: "Le parvovirus canin est une maladie virale hautement contagieuse qui affecte principalement le système gastro-intestinal des chiens.", firstAid: ["Isoler immédiatement le chien", "Maintenir l'hydratation", "Diète 12-24h", "Javel diluée sur surfaces", "Consulter un vétérinaire"], severity: "Élevée", emergency: true },
-          { id: "leishmaniose", name: "Leishmaniose", prevalence: 38, symptoms: ["Perte de poids", "Lésions cutanées", "Problèmes oculaires"], description: "Maladie parasitaire transmise par phlébotome. Très présente au Maroc.", firstAid: ["Protéger des piqûres", "Hygiène lésions", "Alimentation équilibrée", "Consulter vétérinaire"], severity: "Moyenne-Élevée", emergency: false },
-          { id: "dermatite", name: "Dermatite Allergique", prevalence: 32, symptoms: ["Démangeaisons", "Rougeurs", "Pertes de poils"], description: "Réaction inflammatoire due à allergènes ou parasites.", firstAid: ["Identifier source", "Shampooing doux", "Collerette", "Antihistaminique (avis véto)"], severity: "Moyenne", emergency: false },
-          { id: "gastro", name: "Gastro-entérite", prevalence: 28, symptoms: ["Vomissements", "Diarrhée", "Douleurs"], description: "Inflammation estomac/intestins.", firstAid: ["Diète 12-24h", "Eau fréquente", "Surveiller température", "Consulter si > 24h"], severity: "Moyenne", emergency: false },
-          { id: "ear_infection", name: "Otite", prevalence: 25, symptoms: ["Secoue tête", "Gratte oreilles", "Odeur"], description: "Infection de l'oreille.", firstAid: ["Nettoyer délicatement", "Sécher après bain", "Consulter vétérinaire"], severity: "Faible-Moyenne", emergency: false }
-        ]
-      },
-      cats: {
-        commonDiseases: [
-          { id: "coryza", name: "Coryza du Chat", prevalence: 42, symptoms: ["Éternuements", "Écoulements", "Fièvre"], description: "Infection respiratoire complexe.", firstAid: ["Isoler", "Nettoyer écoulements", "Hydratation", "Humidificateur", "Consulter"], severity: "Moyenne-Élevée", emergency: false },
-          { id: "felv", name: "Leucose Féline (FeLV)", prevalence: 35, symptoms: ["Anémie", "Perte poids", "Léthargie"], description: "Maladie virale grave immunitaire.", firstAid: ["Isoler", "Alimentation riche", "Éviter stress", "Consulter"], severity: "Élevée", emergency: false },
-          { id: "fiv", name: "Sida du Chat (FIV)", prevalence: 30, symptoms: ["Fièvre", "Infections", "Perte poids"], description: "Virus affaiblissant l'immunité.", firstAid: ["Garder intérieur", "Alimentation qualité", "Surveiller", "Consulter régulier"], severity: "Élevée", emergency: false },
-          { id: "urinary", name: "Problèmes Urinaires", prevalence: 27, symptoms: ["Difficulté uriner", "Sang", "Léchage"], description: "Cystites, calculs, obstructions.", firstAid: ["Eau fraîche", "Nourriture humide", "Surveiller litière", "URGENCE si bloqué"], severity: "Moyenne-Élevée", emergency: true },
-          { id: "parasites", name: "Parasites Internes", prevalence: 40, symptoms: ["Diarrhée", "Poil terne", "Vers"], description: "Vers intestinaux.", firstAid: ["Vermifuge adapté", "Nettoyer litière", "Traiter puces", "Consulter"], severity: "Faible-Moyenne", emergency: false }
-        ]
-      },
-    }
-
-    const foodData = [
-      { id: "bissara", name: "Bissara", category: "safe", safety: { dogs: "safe", cats: "caution", note: "Riche en protéines végétales" }, description: "Soupe de fèves séchées.", benefits: ["Fibres", "Protéines", "Faible gras"], risks: ["Gaz", "Sel/Épices"], serving: "1-2 c.à.s occasionnel", emergency: false },
-      { id: "msmen", name: "Msemen", category: "caution", safety: { dogs: "caution", cats: "unsafe", note: "Trop riche" }, description: "Crêpe feuilletée.", benefits: ["Énergie"], risks: ["Glucides", "Huile", "Pancréatite", "Obésité"], serving: "Très petite qté", emergency: false },
-      { id: "argan", name: "Huile d'Argan", category: "safe", safety: { dogs: "safe", cats: "safe", note: "Bon pour peau/pelage" }, description: "Huile végétale marocaine.", benefits: ["Peau/Pelage", "Vitamine E", "Immunité"], risks: ["Selles molles si trop"], serving: "1/2 c.à.c", emergency: false },
-      { id: "harira", name: "Harira", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Attention oignons" }, description: "Soupe traditionnelle.", benefits: ["Protéines", "Fibres"], risks: ["Oignons (toxique)", "Sel", "Épices"], serving: "Sans oignons/épices", emergency: false },
-      { id: "menthe", name: "Thé à la Menthe", category: "unsafe", safety: { dogs: "unsafe", cats: "unsafe", note: "Caféine toxique" }, description: "Thé vert sucré.", benefits: ["Aucun"], risks: ["Caféine", "Sucre", "Cœur/Nerfs"], serving: "JAMAIS", emergency: true },
-      { id: "figues", name: "Figues", category: "safe", safety: { dogs: "safe", cats: "safe", note: "Fibres" }, description: "Fruit sucré.", benefits: ["Fibres", "Potassium"], risks: ["Diarrhée", "Sucre (séchées)"], serving: "1-2 petites", emergency: false },
-      { id: "olives", name: "Olives", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Trop salé" }, description: "Fruits marinés.", benefits: ["Antioxydants"], risks: ["Sodium", "Noyaux"], serving: "1-2 max", emergency: false },
-      { id: "amlou", name: "Amlou", category: "caution", safety: { dogs: "caution", cats: "unsafe", note: "Gras et sucré" }, description: "Pâte amandes/argan/miel.", benefits: ["Vitamine E"], risks: ["Calories", "Pancréatite"], serving: "Pointe de couteau", emergency: false },
-      { id: "citron", name: "Agrumes", category: "unsafe", safety: { dogs: "unsafe", cats: "unsafe", note: "Acide/Huiles" }, description: "Fruits acides.", benefits: ["Aucun"], risks: ["Irritation", "Huiles essentiels toxiques"], serving: "Éviter", emergency: true },
-      { id: "dates", name: "Dattes", category: "caution", safety: { dogs: "caution", cats: "caution", note: "Trop sucré" }, description: "Fruit palmier.", benefits: ["Potassium"], risks: ["Sucre", "Noyau"], serving: "1/2 occasionnel", emergency: false }
-    ];
+   
 
     // --- 2. LOGIQUE D'AFFICHAGE (UPDATE pour Image Sac) ---
     let currentFilter = 'toutes';
@@ -1300,112 +1268,143 @@
     }
 
 
-    // --- 6. MODAL LOGIC (FOOD) ---
-    function showFoodSafety() {
+        // --- 6. MODAL LOGIC (BUDGET) ---
+    function showBudgetCalculator() {
       const body = document.getElementById('food-modal-body');
       body.innerHTML = `
         <div class="gradient-gold p-8 pb-12 text-white relative overflow-hidden">
            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
            <div class="relative z-10 text-center">
-             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-utensils"></i></div>
-             <h2 class="text-2xl font-extrabold">Aliments Maroc</h2>
-             <p class="text-white/80 text-sm font-medium">Guide de toxicité</p>
+             <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+               <i class="fas fa-coins"></i>
+             </div>
+             <h2 class="text-2xl font-extrabold">Budget croquettes</h2>
+             <p class="text-white/80 text-sm font-medium">Calcule combien te coûte ce sac par jour et par mois.</p>
            </div>
         </div>
-        <div class="px-6 -mt-8 relative z-20">
-           <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 mb-4">
-              <input type="text" placeholder="Rechercher (Bissara, Msemen...)" onkeyup="filterFoods()" id="food-search" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-amber-500">
-           </div>
-           <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-              <button onclick="filterFoodCat('toutes')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold whitespace-nowrap">Tous</button>
-              <button onclick="filterFoodCat('safe')" class="px-4 py-2 bg-green-100 text-green-700 rounded-xl text-xs font-bold whitespace-nowrap">✅ Sûr</button>
-              <button onclick="filterFoodCat('caution')" class="px-4 py-2 bg-amber-100 text-amber-700 rounded-xl text-xs font-bold whitespace-nowrap">⚠️ Attention</button>
-              <button onclick="filterFoodCat('unsafe')" class="px-4 py-2 bg-red-100 text-red-700 rounded-xl text-xs font-bold whitespace-nowrap">❌ Danger</button>
-           </div>
+
+        <div class="px-6 -mt-8 relative z-20 pb-8">
+          <div class="bg-white p-5 rounded-3xl shadow-lg border border-slate-100">
+            
+            <div class="space-y-4">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                  Prix du sac (DH)
+                </label>
+                <input
+                  id="bag-price"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  placeholder="Ex : 470"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-800 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
+              </div>
+
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                  Poids du sac (kg)
+                </label>
+                <input
+                  id="bag-weight"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  placeholder="Ex : 15"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-800 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
+              </div>
+
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                  Ration quotidienne (g/jour)
+                </label>
+                <input
+                  id="daily-ration"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="Ex : 60"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-800 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
+                <p class="mt-1 text-[10px] text-slate-400">
+                  Utilise la ration conseillée sur le sac ou celle de ton vétérinaire.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onclick="calculateBudget()"
+              class="w-full mt-5 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-md shadow-slate-300 btn-press"
+            >
+              Calculer le budget
+            </button>
+
+            <div id="budget-result" class="mt-5 hidden">
+              <!-- Résultats injectés ici -->
+            </div>
+          </div>
         </div>
-        <div id="food-list" class="px-6 mt-4 space-y-3 pb-6"></div>
       `;
       openModal('food-modal');
-      renderFoodList(foodData);
     }
 
-    function renderFoodList(data) {
-      const list = document.getElementById('food-list');
-      list.innerHTML = '';
-      if(data.length === 0) { list.innerHTML = '<p class="text-center text-slate-400 text-sm mt-4">Aucun aliment trouvé</p>'; return; }
+    function calculateBudget() {
+      const priceInput = document.getElementById('bag-price');
+      const weightInput = document.getElementById('bag-weight');
+      const rationInput = document.getElementById('daily-ration');
+      const resultEl = document.getElementById('budget-result');
 
-      data.forEach(f => {
-        const icon = f.category === 'safe' ? 'check-circle text-green-500' : f.category === 'caution' ? 'exclamation-circle text-amber-500' : 'times-circle text-red-500';
-        const item = document.createElement('div');
-        item.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center cursor-pointer hover:shadow-md transition-all";
-        item.onclick = () => showFoodDetail(f);
-        item.innerHTML = `
-           <div class="flex items-center gap-3">
-             <div class="text-xl"><i class="fas fa-${icon}"></i></div>
-             <div>
-               <h4 class="font-bold text-sm text-slate-800">${f.name}</h4>
-               <p class="text-[10px] text-slate-400">${f.category === 'safe' ? 'Autorisé' : f.category === 'caution' ? 'Modération' : 'Interdit'}</p>
-             </div>
-           </div>
-           <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+      const price = parseFloat((priceInput.value || '').replace(',', '.'));
+      const weight = parseFloat((weightInput.value || '').replace(',', '.'));
+      const ration = parseFloat((rationInput.value || '').replace(',', '.'));
+
+      if (!price || !weight || !ration || price <= 0 || weight <= 0 || ration <= 0) {
+        resultEl.classList.remove('hidden');
+        resultEl.innerHTML = `
+          <div class="bg-red-50 border border-red-100 text-red-600 text-xs font-medium rounded-2xl px-3 py-2">
+            Merci de remplir les trois champs avec des valeurs valides.
+          </div>
         `;
-        list.appendChild(item);
-      });
-    }
+        return;
+      }
 
-    function filterFoods() {
-      const q = document.getElementById('food-search').value.toLowerCase();
-      const filtered = foodData.filter(f => f.name.toLowerCase().includes(q));
-      renderFoodList(filtered);
-    }
+      const pricePerKg = price / weight;
+      const dailyCost = pricePerKg * (ration / 1000);
+      const monthlyCost = dailyCost * 30;
 
-    function filterFoodCat(cat) {
-      const filtered = cat === 'toutes' ? foodData : foodData.filter(f => f.category === cat);
-      renderFoodList(filtered);
-    }
+      let levelText = "";
+      if (dailyCost < 5) {
+        levelText = "Budget léger 💚";
+      } else if (dailyCost < 10) {
+        levelText = "Budget moyen 🟡";
+      } else {
+        levelText = "Budget élevé 🔴";
+      }
 
-    function showFoodDetail(f) {
-      const body = document.getElementById('food-modal-body');
-      const colorClass = f.category === 'safe' ? 'text-green-500' : f.category === 'caution' ? 'text-amber-500' : 'text-red-500';
-      const bgClass = f.category === 'safe' ? 'bg-green-50' : f.category === 'caution' ? 'bg-amber-50' : 'bg-red-50';
-
-      body.innerHTML = `
-         <div class="p-6">
-           <button onclick="showFoodSafety()" class="mb-4 text-xs font-bold text-slate-400 flex items-center gap-1 hover:text-slate-800"><i class="fas fa-arrow-left"></i> Retour</button>
-           
-           <div class="text-center mb-6">
-              <div class="w-20 h-20 ${bgClass} rounded-full flex items-center justify-center mx-auto mb-3 text-3xl ${colorClass}"><i class="fas fa-${f.category === 'safe' ? 'check' : f.category === 'caution' ? 'exclamation' : 'times'}"></i></div>
-              <h2 class="text-2xl font-extrabold text-slate-900">${f.name}</h2>
-              <p class="text-sm text-slate-500 mt-1">${f.description}</p>
-           </div>
-
-           <div class="grid grid-cols-2 gap-3 mb-6">
-              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                 <div class="text-[10px] uppercase font-bold text-slate-400"><i class="fas fa-dog"></i> Chiens</div>
-                 <div class="font-bold text-sm ${f.safety.dogs === 'safe' ? 'text-green-600' : f.safety.dogs === 'caution' ? 'text-amber-600' : 'text-red-600'}">${f.safety.dogs.toUpperCase()}</div>
-              </div>
-              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                 <div class="text-[10px] uppercase font-bold text-slate-400"><i class="fas fa-cat"></i> Chats</div>
-                 <div class="font-bold text-sm ${f.safety.cats === 'safe' ? 'text-green-600' : f.safety.cats === 'caution' ? 'text-amber-600' : 'text-red-600'}">${f.safety.cats.toUpperCase()}</div>
-              </div>
-           </div>
-
-           ${f.emergency ? `<div class="bg-red-500 text-white p-4 rounded-xl mb-6 font-bold text-sm text-center shadow-lg shadow-red-200">⚠️ TOXIQUE - URGENCE VÉTÉRINAIRE</div>` : ''}
-
-           <div class="space-y-4">
-             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Risques</h4>
-                <div class="flex flex-wrap gap-2">${f.risks.map(r => `<span class="text-xs bg-white px-2 py-1 rounded border border-slate-200 text-slate-600">${r}</span>`).join('')}</div>
-             </div>
-             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Service</h4>
-                <p class="text-sm font-medium text-slate-800">${f.serving}</p>
-             </div>
-           </div>
-         </div>
+      resultEl.classList.remove('hidden');
+      resultEl.innerHTML = `
+        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Prix par kg</span>
+            <span class="text-sm font-bold text-slate-900">${pricePerKg.toFixed(2)} DH/kg</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Coût par jour</span>
+            <span class="text-sm font-bold text-slate-900">${dailyCost.toFixed(2)} DH/jour</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Environ par mois</span>
+            <span class="text-sm font-bold text-slate-900">${monthlyCost.toFixed(0)} DH/mois</span>
+          </div>
+          <div class="mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2">
+            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1">Lecture Krokka</p>
+            <p class="text-sm font-medium text-slate-700">${levelText}</p>
+          </div>
+        </div>
       `;
-      document.getElementById('food-modal-content').querySelector('.overflow-y-auto').scrollTop = 0;
     }
+
 
     // --- 7. UTILS & MODAL CONTROLLERS ---
     function openModal(id) {
